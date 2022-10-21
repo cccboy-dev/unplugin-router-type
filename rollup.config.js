@@ -1,29 +1,22 @@
 import typescript from '@rollup/plugin-typescript'
 import { defineConfig } from 'rollup'
 
+const buildTools = ['index', 'webpack', 'vite', 'rollup', 'esbuild']
+
 export default defineConfig({
-  input: './src/index.ts',
+  input: buildTools.map(item => `src/${item}.ts`),
   output: [
     {
+      entryFileNames: '[name].mjs',
       format: 'esm',
-      file: './dist/index.mjs',
+      dir: 'dist',
     },
     {
+      entryFileNames: '[name].js',
       format: 'cjs',
-      file: './dist/index.cjs.js',
-    },
-    {
-      format: 'umd',
-      file: './dist/index.umd.js',
-      name: 'lalala',
+      dir: 'dist',
+      exports: 'auto',
     },
   ],
-  plugins: [typescript(
-    {
-      compilerOptions: {
-        declaration: false,
-        declarationDir: undefined,
-      },
-    },
-  )],
+  plugins: [typescript()],
 })
